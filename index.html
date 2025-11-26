@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>해외송금 전환율 개선 임팩트 계산기</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 30px 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .calculator {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .funnel-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .funnel-step {
+      background: #f8f9ff;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #667eea;
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .step-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .step-badge {
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .step-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    input[type="number"] {
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .conversion-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+    }
+
+    .conversion-rate {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .conversion-label {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .improvement-section {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .improvement-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .btn-calculate {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin: 30px 0;
+    }
+
+    .btn-calculate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .results {
+      display: none;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 16px;
+      padding: 30px;
+    }
+
+    .results.show {
+      display: block;
+    }
+
+    .results-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .result-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .result-label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .result-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .result-unit {
+      font-size: 1rem;
+      color: #999;
+      margin-left: 5px;
+    }
+
+    .impact-highlight {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .impact-value {
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 10px 0;
+    }
+
+    .arrow-down {
+      text-align: center;
+      color: #667eea;
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+
+    .save-section {
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .save-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    input[type="date"] {
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .btn-save {
+      padding: 12px 24px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-save:hover {
+      background: #45a049;
+      transform: translateY(-1px);
+    }
+
+    .saved-data-list {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .saved-item {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .saved-item:hover {
+      border-color: #667eea;
+      transform: translateX(5px);
+    }
+
+    .saved-item-info {
+      flex: 1;
+    }
+
+    .saved-item-date {
+      font-weight: 700;
+      color: #333;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .saved-item-stats {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .saved-item-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-load, .btn-delete {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-load {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-load:hover {
+      background: #5568d3;
+    }
+
+    .btn-delete {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #da190b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 해외송금 전환율 개선 임팩트 계산기</h1>
+
+    <div class="calculator">
+      <!-- 저장/불러오기 -->
+      <div class="section">
+        <div class="save-section">
+          <div style="font-weight: 600; margin-bottom: 15px; font-size: 1.1rem;">💾 데이터 저장/불러오기</div>
+          <div class="save-controls">
+            <input type="date" id="save_date" />
+            <input type="text" id="save_label" placeholder="메모 (선택사항)" style="flex: 1; min-width: 200px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;" />
+            <button class="btn-save" onclick="saveData()">현재 지표 저장</button>
+          </div>
+          <div class="saved-data-list" id="savedDataList"></div>
+        </div>
+      </div>
+
+      <!-- 현재 지표 -->
+      <div class="section">
+        <div class="section-title">📊 현재 지표</div>
+
+        <div class="funnel-container">
+          <!-- Step 1: 회원가입 -->
+          <div class="funnel-step">
+            <div class="step-header">
+              <div class="step-title">1️⃣ 회원가입</div>
+              <div class="step-badge">시작점</div>
+            </div>
+            <div class="step-inputs">
+              <div class="input-group">
+                <label>월간 신규 가입자 수</label>
+                <input type="number" id="signups" value="1000" min="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <!-- Step 2: KYC -->
+          <div class="funnel-step">
+            <div class="step-header">
+              <div class="step-title">2️⃣ KYC 완료</div>
+              <div class="step-badge">본인인증</div>
+            </div>
+            <div class="step-inputs">
+              <div class="input-group">
+                <label>KYC 완료율 (%)</label>
+                <input type="number" id="kyc_rate" value="70" min="0" max="100" step="0.1">
+              </div>
+            </div>
+            <div class="conversion-display">
+              <span class="conversion-rate" id="kyc_users">700</span>
+              <span class="conversion-label">명이 KYC 완료</span>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <!-- Step 3: 송금신청 시작 -->
+          <div class="funnel-step">
+            <div class="step-header">
+              <div class="step-title">3️⃣ 송금신청 시작</div>
+              <div class="step-badge">신청 착수</div>
+            </div>
+            <div class="step-inputs">
+              <div class="input-group">
+                <label>송금신청 시작율 (%)</label>
+                <input type="number" id="start_rate" value="60" min="0" max="100" step="0.1">
+              </div>
+            </div>
+            <div class="conversion-display">
+              <span class="conversion-rate" id="start_users">420</span>
+              <span class="conversion-label">명이 송금신청 시작</span>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <!-- Step 4: 송금신청 완료 -->
+          <div class="funnel-step">
+            <div class="step-header">
+              <div class="step-title">4️⃣ 송금신청 완료</div>
+              <div class="step-badge">신청 제출</div>
+            </div>
+            <div class="step-inputs">
+              <div class="input-group">
+                <label>송금신청 완료율 (%)</label>
+                <input type="number" id="complete_rate" value="80" min="0" max="100" step="0.1">
+              </div>
+            </div>
+            <div class="conversion-display">
+              <span class="conversion-rate" id="complete_users">336</span>
+              <span class="conversion-label">명이 송금신청 완료</span>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <!-- Step 5: 입금완료 -->
+          <div class="funnel-step">
+            <div class="step-header">
+              <div class="step-title">5️⃣ 입금완료</div>
+              <div class="step-badge">자금 예치</div>
+            </div>
+            <div class="step-inputs">
+              <div class="input-group">
+                <label>입금완료율 (%)</label>
+                <input type="number" id="deposit_rate" value="85" min="0" max="100" step="0.1">
+              </div>
+            </div>
+            <div class="conversion-display">
+              <span class="conversion-rate" id="deposit_users">286</span>
+              <span class="conversion-label">명이 입금완료</span>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <!-- Step 6: 송금완료 -->
+          <div class="funnel-step">
+            <div class="step-header">
+              <div class="step-title">6️⃣ 송금완료</div>
+              <div class="step-badge">최종 전환</div>
+            </div>
+            <div class="step-inputs">
+              <div class="input-group">
+                <label>송금완료율 (%)</label>
+                <input type="number" id="remit_rate" value="95" min="0" max="100" step="0.1">
+              </div>
+            </div>
+            <div class="conversion-display">
+              <span class="conversion-rate" id="remit_users">272</span>
+              <span class="conversion-label">명이 첫송금 완료</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 전체 전환율 표시 -->
+        <div style="margin-top: 30px; padding: 20px; background: #667eea; color: white; border-radius: 12px; text-align: center;">
+          <div style="font-size: 0.9rem; margin-bottom: 5px;">전체 전환율 (가입 → 첫송금)</div>
+          <div style="font-size: 2.5rem; font-weight: 700;" id="overall_rate">27.2%</div>
+        </div>
+      </div>
+
+      <!-- 비즈니스 지표 -->
+      <div class="section">
+        <div class="section-title">💰 비즈니스 지표</div>
+        <div class="step-inputs">
+          <div class="input-group">
+            <label>평균 첫송금 금액 (원)</label>
+            <input type="number" id="avg_amount" value="1000000" min="0" step="10000">
+          </div>
+          <div class="input-group">
+            <label>평균 수수료율 (%)</label>
+            <input type="number" id="fee_rate" value="0.8" min="0" max="100" step="0.01">
+          </div>
+        </div>
+      </div>
+
+      <!-- 개선 시나리오 -->
+      <div class="section">
+        <div class="section-title">🎯 개선 시나리오</div>
+        <div class="improvement-section">
+          <div style="font-weight: 600; margin-bottom: 10px;">어느 단계를 개선하시겠습니까?</div>
+          <div class="improvement-inputs">
+            <div class="input-group">
+              <label>개선 타겟 KYC 완료율 (%)</label>
+              <input type="number" id="target_kyc" value="70" min="0" max="100" step="0.1">
+            </div>
+            <div class="input-group">
+              <label>개선 타겟 송금신청 시작율 (%)</label>
+              <input type="number" id="target_start" value="60" min="0" max="100" step="0.1">
+            </div>
+            <div class="input-group">
+              <label>개선 타겟 송금신청 완료율 (%)</label>
+              <input type="number" id="target_complete" value="80" min="0" max="100" step="0.1">
+            </div>
+            <div class="input-group">
+              <label>개선 타겟 입금완료율 (%)</label>
+              <input type="number" id="target_deposit" value="85" min="0" max="100" step="0.1">
+            </div>
+            <div class="input-group">
+              <label>개선 타겟 송금완료율 (%)</label>
+              <input type="number" id="target_remit" value="95" min="0" max="100" step="0.1">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-calculate" onclick="calculate()">💡 임팩트 계산하기</button>
+
+      <!-- 결과 -->
+      <div class="results" id="results">
+        <div class="results-title">📈 예상 비즈니스 임팩트</div>
+
+        <div class="impact-highlight">
+          <div style="font-size: 1.2rem;">개선 후 전체 전환율</div>
+          <div class="impact-value" id="result_new_rate">-</div>
+          <div style="font-size: 1rem; opacity: 0.9;">
+            (<span id="result_rate_diff">-</span> 증가)
+          </div>
+        </div>
+
+        <div style="height: 30px;"></div>
+
+        <div class="results-grid">
+          <div class="result-card">
+            <div class="result-label">추가 첫송금 유저</div>
+            <div class="result-value" id="result_additional_users">-</div>
+            <div class="result-unit">명/월</div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-label">추가 송금액 (GMV)</div>
+            <div class="result-value" id="result_additional_gmv">-</div>
+            <div class="result-unit">원/월</div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-label">추가 수수료 수익</div>
+            <div class="result-value" id="result_additional_revenue">-</div>
+            <div class="result-unit">원/월</div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-label">연간 예상 수익 증가</div>
+            <div class="result-value" id="result_yearly_revenue">-</div>
+            <div class="result-unit">원/년</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 실시간 계산 업데이트
+    function updateCalculations() {
+      const signups = parseFloat(document.getElementById('signups').value) || 0;
+      const kycRate = parseFloat(document.getElementById('kyc_rate').value) || 0;
+      const startRate = parseFloat(document.getElementById('start_rate').value) || 0;
+      const completeRate = parseFloat(document.getElementById('complete_rate').value) || 0;
+      const depositRate = parseFloat(document.getElementById('deposit_rate').value) || 0;
+      const remitRate = parseFloat(document.getElementById('remit_rate').value) || 0;
+
+      const kycUsers = signups * (kycRate / 100);
+      const startUsers = kycUsers * (startRate / 100);
+      const completeUsers = startUsers * (completeRate / 100);
+      const depositUsers = completeUsers * (depositRate / 100);
+      const remitUsers = depositUsers * (remitRate / 100);
+
+      document.getElementById('kyc_users').textContent = Math.round(kycUsers);
+      document.getElementById('start_users').textContent = Math.round(startUsers);
+      document.getElementById('complete_users').textContent = Math.round(completeUsers);
+      document.getElementById('deposit_users').textContent = Math.round(depositUsers);
+      document.getElementById('remit_users').textContent = Math.round(remitUsers);
+
+      const overallRate = (remitUsers / signups) * 100;
+      document.getElementById('overall_rate').textContent = overallRate.toFixed(1) + '%';
+    }
+
+    function calculate() {
+      const signups = parseFloat(document.getElementById('signups').value) || 0;
+      const avgAmount = parseFloat(document.getElementById('avg_amount').value) || 0;
+      const feeRate = parseFloat(document.getElementById('fee_rate').value) || 0;
+
+      // 현재 전환율
+      const currentKyc = parseFloat(document.getElementById('kyc_rate').value) || 0;
+      const currentStart = parseFloat(document.getElementById('start_rate').value) || 0;
+      const currentComplete = parseFloat(document.getElementById('complete_rate').value) || 0;
+      const currentDeposit = parseFloat(document.getElementById('deposit_rate').value) || 0;
+      const currentRemit = parseFloat(document.getElementById('remit_rate').value) || 0;
+
+      // 개선 후 전환율
+      const targetKyc = parseFloat(document.getElementById('target_kyc').value) || 0;
+      const targetStart = parseFloat(document.getElementById('target_start').value) || 0;
+      const targetComplete = parseFloat(document.getElementById('target_complete').value) || 0;
+      const targetDeposit = parseFloat(document.getElementById('target_deposit').value) || 0;
+      const targetRemit = parseFloat(document.getElementById('target_remit').value) || 0;
+
+      // 현재 최종 전환율
+      const currentOverallRate = (currentKyc / 100) * (currentStart / 100) * (currentComplete / 100) * (currentDeposit / 100) * (currentRemit / 100);
+      const currentRemitUsers = signups * currentOverallRate;
+
+      // 개선 후 최종 전환율
+      const newOverallRate = (targetKyc / 100) * (targetStart / 100) * (targetComplete / 100) * (targetDeposit / 100) * (targetRemit / 100);
+      const newRemitUsers = signups * newOverallRate;
+
+      // 임팩트 계산
+      const additionalUsers = newRemitUsers - currentRemitUsers;
+      const additionalGMV = additionalUsers * avgAmount;
+      const additionalRevenue = additionalGMV * (feeRate / 100);
+      const yearlyRevenue = additionalRevenue * 12;
+
+      const rateDiff = ((newOverallRate - currentOverallRate) * 100).toFixed(1);
+
+      // 결과 표시
+      document.getElementById('result_new_rate').textContent = (newOverallRate * 100).toFixed(1) + '%';
+      document.getElementById('result_rate_diff').textContent = '+' + rateDiff + '%p';
+      document.getElementById('result_additional_users').textContent = Math.round(additionalUsers).toLocaleString();
+      document.getElementById('result_additional_gmv').textContent = Math.round(additionalGMV).toLocaleString();
+      document.getElementById('result_additional_revenue').textContent = Math.round(additionalRevenue).toLocaleString();
+      document.getElementById('result_yearly_revenue').textContent = Math.round(yearlyRevenue).toLocaleString();
+
+      document.getElementById('results').classList.add('show');
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 현재 지표 입력 변경시 실시간 업데이트
+    ['signups', 'kyc_rate', 'start_rate', 'complete_rate', 'deposit_rate', 'remit_rate'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateCalculations);
+    });
+
+    // 초기 계산 및 개선 타겟 기본값 설정
+    updateCalculations();
+    document.getElementById('target_kyc').value = document.getElementById('kyc_rate').value;
+    document.getElementById('target_start').value = document.getElementById('start_rate').value;
+    document.getElementById('target_complete').value = document.getElementById('complete_rate').value;
+    document.getElementById('target_deposit').value = document.getElementById('deposit_rate').value;
+    document.getElementById('target_remit').value = document.getElementById('remit_rate').value;
+
+    // LocalStorage 관련 함수들
+    const STORAGE_KEY = 'remittance_metrics_data';
+
+    function saveData() {
+      const date = document.getElementById('save_date').value;
+      if (!date) {
+        alert('날짜를 선택해주세요.');
+        return;
+      }
+
+      const data = {
+        date: date,
+        label: document.getElementById('save_label').value || '',
+        signups: parseFloat(document.getElementById('signups').value) || 0,
+        kycRate: parseFloat(document.getElementById('kyc_rate').value) || 0,
+        startRate: parseFloat(document.getElementById('start_rate').value) || 0,
+        completeRate: parseFloat(document.getElementById('complete_rate').value) || 0,
+        depositRate: parseFloat(document.getElementById('deposit_rate').value) || 0,
+        remitRate: parseFloat(document.getElementById('remit_rate').value) || 0,
+        avgAmount: parseFloat(document.getElementById('avg_amount').value) || 0,
+        feeRate: parseFloat(document.getElementById('fee_rate').value) || 0,
+        savedAt: new Date().toISOString()
+      };
+
+      // 전체 전환율 계산
+      const overallRate = (data.kycRate / 100) * (data.startRate / 100) * (data.completeRate / 100) *
+                          (data.depositRate / 100) * (data.remitRate / 100) * 100;
+      data.overallRate = overallRate;
+
+      // 기존 데이터 불러오기
+      let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+      // 같은 날짜가 있으면 덮어쓰기
+      const existingIndex = savedData.findIndex(item => item.date === date);
+      if (existingIndex >= 0) {
+        if (confirm('해당 날짜의 데이터가 이미 존재합니다. 덮어쓰시겠습니까?')) {
+          savedData[existingIndex] = data;
+        } else {
+          return;
+        }
+      } else {
+        savedData.push(data);
+      }
+
+      // 날짜순 정렬 (최신순)
+      savedData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // 저장
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+
+      // UI 업데이트
+      displaySavedData();
+
+      // 입력 필드 초기화
+      document.getElementById('save_label').value = '';
+
+      alert('저장되었습니다!');
+    }
+
+    function loadData(date) {
+      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      const data = savedData.find(item => item.date === date);
+
+      if (!data) {
+        alert('데이터를 찾을 수 없습니다.');
+        return;
+      }
+
+      // 데이터 로드
+      document.getElementById('signups').value = data.signups;
+      document.getElementById('kyc_rate').value = data.kycRate;
+      document.getElementById('start_rate').value = data.startRate;
+      document.getElementById('complete_rate').value = data.completeRate;
+      document.getElementById('deposit_rate').value = data.depositRate;
+      document.getElementById('remit_rate').value = data.remitRate;
+      document.getElementById('avg_amount').value = data.avgAmount;
+      document.getElementById('fee_rate').value = data.feeRate;
+
+      // 개선 타겟도 동일하게 설정
+      document.getElementById('target_kyc').value = data.kycRate;
+      document.getElementById('target_start').value = data.startRate;
+      document.getElementById('target_complete').value = data.completeRate;
+      document.getElementById('target_deposit').value = data.depositRate;
+      document.getElementById('target_remit').value = data.remitRate;
+
+      // 계산 업데이트
+      updateCalculations();
+
+      alert('데이터를 불러왔습니다!');
+    }
+
+    function deleteData(date) {
+      if (!confirm('정말 삭제하시겠습니까?')) {
+        return;
+      }
+
+      let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      savedData = savedData.filter(item => item.date !== date);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+
+      displaySavedData();
+      alert('삭제되었습니다.');
+    }
+
+    function displaySavedData() {
+      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      const container = document.getElementById('savedDataList');
+
+      if (savedData.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">저장된 데이터가 없습니다.</div>';
+        return;
+      }
+
+      container.innerHTML = savedData.map(data => {
+        const dateObj = new Date(data.date);
+        const displayDate = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+        const remitUsers = Math.round(data.signups * (data.overallRate / 100));
+
+        return `
+          <div class="saved-item">
+            <div class="saved-item-info">
+              <div class="saved-item-date">${displayDate} ${data.label ? '- ' + data.label : ''}</div>
+              <div class="saved-item-stats">
+                가입자: ${data.signups.toLocaleString()}명 |
+                전체 전환율: ${data.overallRate.toFixed(1)}% |
+                첫송금: ${remitUsers.toLocaleString()}명
+              </div>
+            </div>
+            <div class="saved-item-actions">
+              <button class="btn-load" onclick="loadData('${data.date}')">불러오기</button>
+              <button class="btn-delete" onclick="deleteData('${data.date}')">삭제</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 오늘 날짜로 초기화
+    document.getElementById('save_date').valueAsDate = new Date();
+
+    // 저장된 데이터 표시
+    displaySavedData();
+  </script>
+</body>
+</html>
