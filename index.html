@@ -843,6 +843,13 @@
           return;
         }
 
+        // 데이터가 배열인지 확인
+        if (!Array.isArray(data)) {
+          console.error('예상치 못한 데이터 형식:', data);
+          alert('데이터 형식이 올바르지 않습니다.');
+          return;
+        }
+
         // LocalStorage에 Google Sheets 데이터 병합
         let localData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
