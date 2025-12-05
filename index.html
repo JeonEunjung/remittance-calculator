@@ -367,7 +367,7 @@
             <input type="date" id="save_date" />
             <input type="text" id="save_label" placeholder="메모 (선택사항)" style="flex: 1; min-width: 200px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;" />
             <button class="btn-save" onclick="saveData()">💾 현재 지표 저장</button>
-            <button class="btn-save" onclick="loadFromGoogleSheets()" style="background: #4285f4;">📥 구글시트에서 불러오기</button>
+            <button class="btn-save" onclick="refreshData()" style="background: #4285f4;">🔄 새로고침</button>
           </div>
           <div class="saved-data-list" id="savedDataList"></div>
         </div>
@@ -676,11 +676,11 @@
     document.getElementById('target_deposit').value = document.getElementById('deposit_rate').value;
     document.getElementById('target_remit').value = document.getElementById('remit_rate').value;
 
-    // LocalStorage 관련 함수들
-    const STORAGE_KEY = 'remittance_metrics_data';
+    // 데이터 저장 관련 함수들
+    const STORAGE_KEY = 'remittance_metrics_data'; // localStorage는 캐시용으로만 사용
     const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxItp1Ebs9LpJFFSpK-XTgmWZ3UfZST19j5OEBcXTwtWy6LeUStgElXDGEKZZfn0xk/exec';
 
-    function saveData() {
+    async function saveData() {
       const date = document.getElementById('save_date').value;
       if (!date) {
         alert('날짜를 선택해주세요.');
@@ -706,41 +706,8 @@
                           (data.depositRate / 100) * (data.remitRate / 100) * 100;
       data.overallRate = overallRate;
 
-      // 기존 데이터 불러오기
-      let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-
-      // 같은 날짜가 있으면 덮어쓰기
-      const existingIndex = savedData.findIndex(item => item.date === date);
-      if (existingIndex >= 0) {
-        if (confirm('해당 날짜의 데이터가 이미 존재합니다. 덮어쓰시겠습니까?')) {
-          savedData[existingIndex] = data;
-        } else {
-          return;
-        }
-      } else {
-        savedData.push(data);
-      }
-
-      // 날짜순 정렬 (최신순)
-      savedData.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      // 저장
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
-
-      // Google Sheets에도 저장
-      saveToGoogleSheets(data);
-
-      // UI 업데이트
-      displaySavedData();
-
-      // 입력 필드 초기화
-      document.getElementById('save_label').value = '';
-
-      alert('저장되었습니다!');
-    }
-
-    async function saveToGoogleSheets(data) {
       try {
+        // Google Sheets에 저장 (주요 저장소)
         const response = await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
           mode: 'no-cors',
@@ -749,9 +716,45 @@
           },
           body: JSON.stringify(data)
         });
-        console.log('Google Sheets에 저장 완료');
+
+        // localStorage에 캐시 저장
+        let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const existingIndex = savedData.findIndex(item => item.date === date);
+        if (existingIndex >= 0) {
+          savedData[existingIndex] = data;
+        } else {
+          savedData.push(data);
+        }
+        savedData.sort((a, b) => new Date(b.date) - new Date(a.date));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+
+        // 입력 필드 초기화
+        document.getElementById('save_label').value = '';
+
+        alert('저장되었습니다!');
+
+        // 데이터 새로고침
+        await refreshData();
       } catch (error) {
-        console.error('Google Sheets 저장 실패:', error);
+        console.error('저장 실패:', error);
+        alert('저장에 실패했습니다. 다시 시도해주세요.');
+      }
+    }
+
+    async function deleteFromGoogleSheets(date) {
+      try {
+        const response = await fetch(GOOGLE_SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ action: 'delete', date: date })
+        });
+        console.log('Google Sheets에서 삭제 완료');
+      } catch (error) {
+        console.error('Google Sheets 삭제 실패:', error);
+        throw error;
       }
     }
 
@@ -787,17 +790,27 @@
       alert('데이터를 불러왔습니다!');
     }
 
-    function deleteData(date) {
+    async function deleteData(date) {
       if (!confirm('정말 삭제하시겠습니까?')) {
         return;
       }
 
-      let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      savedData = savedData.filter(item => item.date !== date);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+      try {
+        // Google Sheets에서 삭제
+        await deleteFromGoogleSheets(date);
 
-      displaySavedData();
-      alert('삭제되었습니다.');
+        // localStorage 캐시에서도 삭제
+        let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        savedData = savedData.filter(item => item.date !== date);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+
+        // 데이터 새로고침
+        await refreshData();
+        alert('삭제되었습니다.');
+      } catch (error) {
+        console.error('삭제 실패:', error);
+        alert('삭제에 실패했습니다. 다시 시도해주세요.');
+      }
     }
 
     function displaySavedData() {
@@ -833,57 +846,44 @@
       }).join('');
     }
 
-    async function loadFromGoogleSheets() {
+    async function refreshData() {
       try {
-        const response = await fetch(GOOGLE_SHEET_URL);
+        // 캐시 우회를 위한 타임스탬프 추가
+        const timestamp = new Date().getTime();
+        const response = await fetch(`${GOOGLE_SHEET_URL}?timestamp=${timestamp}`);
         const data = await response.json();
 
         if (data.status === 'error') {
-          alert('데이터 불러오기 실패: ' + data.message);
+          console.error('데이터 불러오기 실패:', data.message);
           return;
         }
 
         // 데이터가 배열인지 확인
         if (!Array.isArray(data)) {
           console.error('예상치 못한 데이터 형식:', data);
-          alert('데이터 형식이 올바르지 않습니다.');
           return;
         }
 
-        // LocalStorage에 Google Sheets 데이터 병합
-        let localData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-
-        // Google Sheets 데이터를 LocalStorage 형식으로 변환
-        data.forEach(sheetItem => {
-          const existingIndex = localData.findIndex(item => item.date === sheetItem.date);
-          if (existingIndex >= 0) {
-            localData[existingIndex] = sheetItem;
-          } else {
-            localData.push(sheetItem);
-          }
-        });
-
-        // 날짜순 정렬
-        localData.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        // 저장
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(localData));
+        // Google Sheets 데이터를 localStorage 캐시에 저장
+        const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(sortedData));
 
         // UI 업데이트
         displaySavedData();
 
-        alert('구글시트에서 데이터를 불러왔습니다!');
+        console.log(`${data.length}개의 데이터를 불러왔습니다.`);
       } catch (error) {
         console.error('Google Sheets 불러오기 실패:', error);
-        alert('데이터 불러오기 실패. 콘솔을 확인하세요.');
+        // 실패 시 localStorage 캐시 사용
+        displaySavedData();
       }
     }
 
     // 오늘 날짜로 초기화
     document.getElementById('save_date').valueAsDate = new Date();
 
-    // 저장된 데이터 표시
-    displaySavedData();
+    // 페이지 로드 시 Google Sheets에서 데이터 자동 불러오기
+    refreshData();
   </script>
 </body>
 </html>
