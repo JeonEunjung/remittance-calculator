@@ -728,7 +728,11 @@
         return;
       }
 
+      // 고유 ID: 날짜 + 시간 (ISO 문자열)
+      const id = new Date().toISOString();
+
       const data = {
+        id: id,
         date: date,
         label: document.getElementById('save_label').value || '',
         signups: parseFloat(document.getElementById('signups').value) || 0,
@@ -739,7 +743,7 @@
         remitRate: parseFloat(document.getElementById('remit_rate').value) || 0,
         avgAmount: parseFloat(document.getElementById('avg_amount').value) || 0,
         feeRate: parseFloat(document.getElementById('fee_rate').value) || 0,
-        savedAt: new Date().toISOString()
+        savedAt: id
       };
 
       // 전체 전환율 계산
@@ -760,13 +764,9 @@
 
         // localStorage에 캐시 저장
         let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        const existingIndex = savedData.findIndex(item => item.date === date);
-        if (existingIndex >= 0) {
-          savedData[existingIndex] = data;
-        } else {
-          savedData.push(data);
-        }
-        savedData.sort((a, b) => new Date(b.date) - new Date(a.date));
+        savedData.push(data);
+        // 날짜 최신순, 같은 날짜는 시간 최신순으로 정렬
+        savedData.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
 
         // 입력 필드 초기화
@@ -782,7 +782,7 @@
       }
     }
 
-    async function deleteFromGoogleSheets(date) {
+    async function deleteFromGoogleSheets(id) {
       try {
         const response = await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
@@ -790,7 +790,7 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ action: 'delete', date: date })
+          body: JSON.stringify({ action: 'delete', id: id })
         });
         console.log('Google Sheets에서 삭제 완료');
       } catch (error) {
@@ -799,9 +799,9 @@
       }
     }
 
-    function loadData(date) {
+    function loadData(id) {
       const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      const data = savedData.find(item => item.date === date);
+      const data = savedData.find(item => item.id === id);
 
       if (!data) {
         alert('데이터를 찾을 수 없습니다.');
@@ -831,23 +831,28 @@
       alert('데이터를 불러왔습니다!');
     }
 
-    async function deleteData(date) {
+    async function deleteData(id) {
       if (!confirm('정말 삭제하시겠습니까?')) {
         return;
       }
 
       try {
+        console.log('삭제 요청 ID:', id);
+
         // Google Sheets에서 삭제
-        await deleteFromGoogleSheets(date);
+        await deleteFromGoogleSheets(id);
 
         // localStorage 캐시에서도 삭제
         let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        savedData = savedData.filter(item => item.date !== date);
+        console.log('삭제 전 데이터 개수:', savedData.length);
+        savedData = savedData.filter(item => item.id !== id);
+        console.log('삭제 후 데이터 개수:', savedData.length);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+
+        alert('삭제되었습니다.');
 
         // 데이터 새로고침
         await refreshData();
-        alert('삭제되었습니다.');
       } catch (error) {
         console.error('삭제 실패:', error);
         alert('삭제에 실패했습니다. 다시 시도해주세요.');
@@ -866,12 +871,14 @@
       container.innerHTML = savedData.map(data => {
         const dateObj = new Date(data.date);
         const displayDate = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+        const timeObj = new Date(data.savedAt);
+        const displayTime = timeObj.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
         const remitUsers = Math.round(data.signups * (data.overallRate / 100));
 
         return `
           <div class="saved-item">
             <div class="saved-item-info">
-              <div class="saved-item-date">${displayDate} ${data.label ? '- ' + data.label : ''}</div>
+              <div class="saved-item-date">${displayDate} ${displayTime} ${data.label ? '- ' + data.label : ''}</div>
               <div class="saved-item-stats">
                 가입자: ${data.signups.toLocaleString()}명 |
                 전체 전환율: ${data.overallRate.toFixed(1)}% |
@@ -879,8 +886,8 @@
               </div>
             </div>
             <div class="saved-item-actions">
-              <button class="btn-load" onclick="loadData('${data.date}')">불러오기</button>
-              <button class="btn-delete" onclick="deleteData('${data.date}')">삭제</button>
+              <button class="btn-load" onclick="loadData('${data.id}')">불러오기</button>
+              <button class="btn-delete" onclick="deleteData('${data.id}')">삭제</button>
             </div>
           </div>
         `;
@@ -919,7 +926,7 @@
         }
 
         // Google Sheets 데이터를 localStorage 캐시에 저장
-        const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const sortedData = data.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(sortedData));
 
         // UI 업데이트
