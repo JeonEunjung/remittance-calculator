@@ -500,6 +500,16 @@
     .tab-content.active {
       display: block;
     }
+
+    /* 툴팁 스타일 */
+    .info-tooltip:hover .tooltip-text {
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    .tooltip-text {
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -524,7 +534,7 @@
             <input type="date" id="funnel_save_date" />
             <input type="text" id="funnel_save_label" placeholder="메모 (선택사항)" style="flex: 1; min-width: 200px;" />
             <button class="btn-save" onclick="saveFunnelData()">현재 지표 저장</button>
-            <button class="btn-save" onclick="refreshData()" style="background: #007aff;">새로고침</button>
+            <button class="btn-save" onclick="refreshFunnelData()" style="background: #007aff;">새로고침</button>
           </div>
 
           <div style="height: 1px; background: rgba(0, 0, 0, 0.08); margin: 24px 0;"></div>
@@ -881,8 +891,41 @@
               </div>
             </div>
 
+            <!-- 비중 합계 및 검증 표시 -->
+            <div style="margin-top: 24px; padding: 16px 20px; background: white; border-radius: 10px; border: 1px solid rgba(0, 0, 0, 0.06);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1;">
+                  <div style="font-size: 0.875rem; color: #6e6e73; margin-bottom: 4px;">입력된 통화 비중 합계</div>
+                  <div style="font-size: 1.5rem; font-weight: 600;" id="currency_ratio_sum_display">100.0%</div>
+                </div>
+                <div id="currency_ratio_warning" style="display: none; padding: 8px 16px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; font-size: 0.875rem; color: #856404;">
+                  ⚠️ 100%를 초과했습니다
+                </div>
+              </div>
+
+              <!-- 기타 통화 표시 -->
+              <div id="currency_other_display" style="display: none; margin-top: 12px; padding: 12px; background: #f0f9ff; border-radius: 8px; border: 1px solid rgba(0, 122, 255, 0.2);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <span style="font-weight: 600; color: #1d1d1f;">기타 통화</span>
+                    <span style="font-size: 0.875rem; color: #86868b; margin-left: 8px;">비중: <span id="currency_other_ratio">0%</span></span>
+                  </div>
+                  <div style="font-size: 0.875rem; color: #6e6e73; display: flex; align-items: center; gap: 6px;">
+                    가정 완료율: <span style="font-weight: 600; color: #007aff;" id="currency_other_rate">80%</span>
+                    <span class="info-tooltip" style="position: relative; display: inline-flex; align-items: center; cursor: help;">
+                      <span style="display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: rgba(0, 122, 255, 0.1); color: #007aff; border-radius: 50%; font-size: 12px; font-weight: 600;">ⓘ</span>
+                      <span class="tooltip-text" style="visibility: hidden; opacity: 0; position: absolute; bottom: calc(100% + 8px); right: -60px; background: #1d1d1f; color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; z-index: 9999; transition: opacity 0.2s ease; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
+                        입력된 6개 통화의 평균 완료율을 사용합니다
+                        <span style="position: absolute; top: 100%; right: 68px; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #1d1d1f;"></span>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- 현재 가중평균 완료율 표시 -->
-            <div style="margin-top: 24px; padding: 20px; background: white; border-radius: 10px; border: 1px solid rgba(0, 0, 0, 0.06);">
+            <div style="margin-top: 16px; padding: 20px; background: white; border-radius: 10px; border: 1px solid rgba(0, 0, 0, 0.06);">
               <div style="text-align: center;">
                 <div style="font-size: 0.875rem; color: #6e6e73; margin-bottom: 8px;">전체 가중평균 신청 완료율</div>
                 <div style="font-size: 2.5rem; font-weight: 600; color: #007aff; letter-spacing: -0.02em;" id="currency_weighted_rate">-</div>
@@ -1530,12 +1573,59 @@
       const startUsers = parseFloat(document.getElementById('currency_start_users').value) || 0;
       const currencies = ['jpy', 'usd', 'eur', 'aud', 'cad', 'gbp'];
 
+      // 비중 합계 계산
+      let ratioSum = 0;
       let weightedRate = 0;
+
       currencies.forEach(curr => {
         const ratio = parseFloat(document.getElementById(`currency_${curr}_ratio`).value) || 0;
         const rate = parseFloat(document.getElementById(`currency_${curr}_rate`).value) || 0;
+        ratioSum += ratio;
         weightedRate += (ratio / 100) * (rate / 100);
       });
+
+      // 비중 합계 표시 업데이트
+      const ratioSumDisplay = document.getElementById('currency_ratio_sum_display');
+      const ratioWarning = document.getElementById('currency_ratio_warning');
+      const otherDisplay = document.getElementById('currency_other_display');
+
+      ratioSumDisplay.textContent = ratioSum.toFixed(1) + '%';
+
+      // 100% 초과 시 경고 표시
+      if (ratioSum > 100) {
+        ratioSumDisplay.style.color = '#d32f2f';
+        ratioWarning.style.display = 'block';
+        otherDisplay.style.display = 'none';
+      } else if (ratioSum < 100) {
+        // 100% 미만이면 기타 통화 표시
+        ratioSumDisplay.style.color = '#1d1d1f';
+        ratioWarning.style.display = 'none';
+        otherDisplay.style.display = 'block';
+
+        const otherRatio = 100 - ratioSum;
+        document.getElementById('currency_other_ratio').textContent = otherRatio.toFixed(1) + '%';
+
+        // 기타 통화 가정 완료율 (6개 통화의 평균 완료율 사용)
+        let totalRate = 0;
+        let count = 0;
+        currencies.forEach(curr => {
+          const rate = parseFloat(document.getElementById(`currency_${curr}_rate`).value) || 0;
+          if (rate > 0) {
+            totalRate += rate;
+            count++;
+          }
+        });
+        const otherRate = count > 0 ? (totalRate / count) : 80;
+        document.getElementById('currency_other_rate').textContent = otherRate.toFixed(1) + '%';
+
+        // 기타 통화를 가중평균에 포함
+        weightedRate += (otherRatio / 100) * (otherRate / 100);
+      } else {
+        // 정확히 100%
+        ratioSumDisplay.style.color = '#34c759';
+        ratioWarning.style.display = 'none';
+        otherDisplay.style.display = 'none';
+      }
 
       const completedUsers = startUsers * weightedRate;
 
