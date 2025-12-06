@@ -8,139 +8,173 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #e0e7ef 0%, #c8d5e3 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+      background: #f5f5f7;
       min-height: 100vh;
-      padding: 30px 20px;
-      color: #333;
+      padding: 40px 20px;
+      color: #1d1d1f;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 980px;
       margin: 0 auto;
     }
 
     h1 {
       text-align: center;
-      color: #2c3e50;
-      font-size: 2rem;
-      margin-bottom: 30px;
-      text-shadow: 0 2px 4px rgba(255,255,255,0.5);
+      color: #1d1d1f;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.015em;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #86868b;
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-bottom: 48px;
+      letter-spacing: -0.01em;
     }
 
     .calculator {
-      background: white;
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.06);
+      border: 0.5px solid rgba(0, 0, 0, 0.04);
     }
 
     .section {
-      margin-bottom: 40px;
+      margin-bottom: 48px;
     }
 
     .section-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #5a6c7d;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #e0e0e0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
     }
 
     .funnel-container {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
     }
 
     .funnel-step {
-      background: #f5f7fa;
+      background: #f5f5f7;
       border-radius: 12px;
-      padding: 20px;
-      border-left: 4px solid #5a6c7d;
+      padding: 20px 24px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .funnel-step:hover {
+      background: #fafafa;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
     }
 
     .step-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 16px;
     }
 
     .step-title {
       font-weight: 600;
-      font-size: 1.1rem;
-      color: #333;
+      font-size: 1.05rem;
+      color: #1d1d1f;
+      letter-spacing: -0.01em;
     }
 
     .step-badge {
-      background: #5a6c7d;
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      background: rgba(0, 0, 0, 0.04);
+      color: #86868b;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0;
     }
 
     .step-inputs {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
+      gap: 16px;
     }
 
     .input-group {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 8px;
     }
 
     label {
-      font-size: 0.9rem;
-      color: #666;
-      font-weight: 500;
+      font-size: 0.875rem;
+      color: #6e6e73;
+      font-weight: 400;
+      letter-spacing: -0.005em;
     }
 
     input[type="number"] {
-      padding: 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
+      padding: 12px 16px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
       font-size: 1rem;
-      transition: all 0.3s;
+      background: white;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      color: #1d1d1f;
+    }
+
+    input[type="number"]:hover {
+      border-color: rgba(0, 0, 0, 0.2);
     }
 
     input[type="number"]:focus {
       outline: none;
-      border-color: #5a6c7d;
-      box-shadow: 0 0 0 3px rgba(90, 108, 125, 0.1);
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
     }
 
     .conversion-display {
       display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-      padding: 10px;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 12px 16px;
       background: white;
-      border-radius: 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
     }
 
     .conversion-rate {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #5a6c7d;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #007aff;
+      letter-spacing: -0.02em;
     }
 
     .conversion-label {
-      color: #999;
-      font-size: 0.9rem;
+      color: #86868b;
+      font-size: 0.875rem;
+      font-weight: 400;
     }
 
     .improvement-section {
-      background: #fff3cd;
-      border-left: 4px solid #ffc107;
+      background: #fff9e6;
       border-radius: 12px;
-      padding: 20px;
+      padding: 24px;
+      border: 1px solid rgba(255, 193, 7, 0.2);
     }
 
     .improvement-inputs {
@@ -152,28 +186,36 @@
 
     .btn-calculate {
       width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #5a6c7d 0%, #7a8a9a 100%);
+      padding: 16px 24px;
+      background: #007aff;
       color: white;
       border: none;
       border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-size: 1.0625rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      margin: 30px 0;
+      transition: all 0.2s ease;
+      margin: 32px 0;
+      letter-spacing: -0.01em;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
     }
 
     .btn-calculate:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(90, 108, 125, 0.4);
+      background: #0051d5;
+      transform: scale(1.01);
+    }
+
+    .btn-calculate:active {
+      transform: scale(0.98);
     }
 
     .results {
       display: none;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background: white;
       border-radius: 16px;
-      padding: 30px;
+      padding: 32px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
     .results.show {
@@ -182,175 +224,208 @@
 
     .results-title {
       font-size: 1.5rem;
-      font-weight: 700;
-      color: #333;
-      margin-bottom: 20px;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin-bottom: 24px;
       text-align: center;
+      letter-spacing: -0.02em;
     }
 
     .results-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
     .result-card {
-      background: white;
+      background: #f5f5f7;
       border-radius: 12px;
-      padding: 20px;
+      padding: 24px;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 1px solid rgba(0, 0, 0, 0.04);
     }
 
     .result-label {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 10px;
+      font-size: 0.875rem;
+      color: #6e6e73;
+      margin-bottom: 12px;
+      font-weight: 400;
     }
 
     .result-value {
       font-size: 2rem;
-      font-weight: 700;
-      color: #5a6c7d;
+      font-weight: 600;
+      color: #1d1d1f;
+      letter-spacing: -0.02em;
     }
 
     .result-unit {
-      font-size: 1rem;
-      color: #999;
-      margin-left: 5px;
+      font-size: 0.875rem;
+      color: #86868b;
+      margin-left: 4px;
+      font-weight: 400;
     }
 
     .impact-highlight {
-      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
       color: white;
-      padding: 25px;
-      border-radius: 12px;
+      padding: 32px;
+      border-radius: 16px;
       text-align: center;
+      box-shadow: 0 4px 12px rgba(52, 199, 89, 0.25);
     }
 
     .impact-value {
       font-size: 3rem;
-      font-weight: 700;
-      margin: 10px 0;
+      font-weight: 600;
+      margin: 12px 0;
+      letter-spacing: -0.03em;
     }
 
     .arrow-down {
       text-align: center;
-      color: #5a6c7d;
-      font-size: 1.5rem;
-      margin: 10px 0;
+      color: #86868b;
+      font-size: 1.25rem;
+      margin: 8px 0;
     }
 
     .save-section {
-      background: #e8f5e9;
-      border-left: 4px solid #4caf50;
+      background: #f5f5f7;
       border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 24px;
+      margin-bottom: 32px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
     }
 
     .save-controls {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
       flex-wrap: wrap;
     }
 
-    input[type="date"] {
-      padding: 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
+    input[type="date"], input[type="text"] {
+      padding: 12px 16px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
       font-size: 1rem;
+      background: white;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      color: #1d1d1f;
+    }
+
+    input[type="date"]:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
     }
 
     .btn-save {
-      padding: 12px 24px;
-      background: #4caf50;
+      padding: 12px 20px;
+      background: #34c759;
       color: white;
       border: none;
-      border-radius: 8px;
-      font-weight: 600;
+      border-radius: 10px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      font-size: 0.9375rem;
     }
 
     .btn-save:hover {
-      background: #45a049;
-      transform: translateY(-1px);
+      background: #30d158;
+      transform: scale(1.02);
+    }
+
+    .btn-save:active {
+      transform: scale(0.98);
     }
 
     .saved-data-list {
       margin-top: 20px;
-      max-height: 300px;
-      overflow-y: auto;
+      max-height: 400px;
+      overflow-y: visible;
+      overflow-x: visible;
     }
 
     .saved-item {
       background: white;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 10px;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      border: 2px solid transparent;
-      transition: all 0.2s;
+      align-items: flex-start;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      transition: all 0.2s ease;
       cursor: pointer;
+      position: relative;
     }
 
     .saved-item:hover {
-      border-color: #667eea;
-      transform: translateX(5px);
+      border-color: #007aff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
     }
 
     .saved-item-info {
       flex: 1;
+      margin-right: 16px;
     }
 
     .saved-item-date {
-      font-weight: 700;
-      color: #333;
-      font-size: 1.1rem;
-      margin-bottom: 5px;
+      font-weight: 600;
+      color: #1d1d1f;
+      font-size: 1rem;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
     }
 
     .saved-item-stats {
-      font-size: 0.85rem;
-      color: #666;
+      font-size: 0.8125rem;
+      color: #6e6e73;
+      font-weight: 400;
     }
 
     .saved-item-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     .btn-load, .btn-delete {
       padding: 8px 16px;
       border: none;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      white-space: nowrap;
     }
 
     .btn-load {
-      background: #5a6c7d;
+      background: #007aff;
       color: white;
     }
 
     .btn-load:hover {
-      background: #4a5c6d;
+      background: #0051d5;
+      transform: scale(1.02);
     }
 
     .btn-delete {
-      background: #f44336;
+      background: #ff3b30;
       color: white;
     }
 
     .btn-delete:hover {
-      background: #da190b;
+      background: #d70015;
+      transform: scale(1.02);
     }
 
     .loading-message {
@@ -386,37 +461,89 @@
       font-weight: 600;
       color: #5a6c7d;
     }
+
+    /* 탭 스타일 */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #86868b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .tab:hover {
+      color: #1d1d1f;
+    }
+
+    .tab.active {
+      color: #007aff;
+      border-bottom-color: #007aff;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🚀 해외송금 전환율 개선 임팩트 계산기</h1>
+    <h1>임팩트 시뮬레이터</h1>
+    <div class="subtitle">퍼널 전환율 변화에 따른 비즈니스 효과를 계산합니다</div>
 
     <div class="calculator">
+      <!-- 탭 네비게이션 -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('funnel')">전체 퍼널 분석</button>
+        <button class="tab" onclick="switchTab('currency')">통화별 분석</button>
+      </div>
+
+      <!-- Tab 1: 전체 퍼널 분석 -->
+      <div id="funnel_tab" class="tab-content active">
       <!-- 저장/불러오기 -->
       <div class="section">
         <div class="save-section">
-          <div style="font-weight: 600; margin-bottom: 15px; font-size: 1.1rem;">💾 데이터 저장/불러오기</div>
+          <div style="font-weight: 600; margin-bottom: 16px; font-size: 1.125rem; color: #1d1d1f; letter-spacing: -0.01em;">퍼널 데이터 저장/불러오기</div>
           <div class="save-controls">
-            <input type="date" id="save_date" />
-            <input type="text" id="save_label" placeholder="메모 (선택사항)" style="flex: 1; min-width: 200px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;" />
-            <button class="btn-save" onclick="saveData()">💾 현재 지표 저장</button>
-            <button class="btn-save" onclick="refreshData()" style="background: #4285f4;">🔄 새로고침</button>
+            <input type="date" id="funnel_save_date" />
+            <input type="text" id="funnel_save_label" placeholder="메모 (선택사항)" style="flex: 1; min-width: 200px;" />
+            <button class="btn-save" onclick="saveFunnelData()">현재 지표 저장</button>
+            <button class="btn-save" onclick="refreshData()" style="background: #007aff;">새로고침</button>
           </div>
 
+          <div style="height: 1px; background: rgba(0, 0, 0, 0.08); margin: 24px 0;"></div>
+
+          <div style="font-weight: 600; margin-bottom: 16px; font-size: 1rem; color: #1d1d1f; letter-spacing: -0.01em;">저장된 퍼널 데이터</div>
+
           <!-- 로딩 메시지 -->
-          <div class="loading-message" id="loadingMessage">
+          <div class="loading-message" id="funnel_loadingMessage">
             <div class="spinner"></div>
             <div class="loading-text">구글 시트 데이터 동기화 중...</div>
           </div>
 
-          <div class="saved-data-list" id="savedDataList"></div>
+          <div class="saved-data-list" id="funnel_savedDataList"></div>
         </div>
       </div>
 
       <!-- 현재 지표 -->
       <div class="section">
-        <div class="section-title">📊 현재 지표</div>
+        <div class="section-title">현재 지표</div>
 
         <div class="funnel-container">
           <!-- Step 1: 회원가입 -->
@@ -535,15 +662,15 @@
         </div>
 
         <!-- 전체 전환율 표시 -->
-        <div style="margin-top: 30px; padding: 20px; background: #5a6c7d; color: white; border-radius: 12px; text-align: center;">
-          <div style="font-size: 0.9rem; margin-bottom: 5px;">전체 전환율 (가입 → 첫송금)</div>
-          <div style="font-size: 2.5rem; font-weight: 700;" id="overall_rate">27.2%</div>
+        <div style="margin-top: 24px; padding: 28px; background: linear-gradient(135deg, #007aff 0%, #0051d5 100%); color: white; border-radius: 16px; text-align: center; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);">
+          <div style="font-size: 0.9375rem; margin-bottom: 8px; opacity: 0.9; font-weight: 400;">전체 전환율 (가입 → 첫송금)</div>
+          <div style="font-size: 3rem; font-weight: 600; letter-spacing: -0.03em;" id="overall_rate">27.2%</div>
         </div>
       </div>
 
       <!-- 비즈니스 지표 -->
       <div class="section">
-        <div class="section-title">💰 비즈니스 지표</div>
+        <div class="section-title">비즈니스 지표</div>
         <div class="step-inputs">
           <div class="input-group">
             <label>평균 첫송금 금액 (원)</label>
@@ -558,9 +685,9 @@
 
       <!-- 개선 시나리오 -->
       <div class="section">
-        <div class="section-title">🎯 개선 시나리오</div>
+        <div class="section-title">개선 시나리오</div>
         <div class="improvement-section">
-          <div style="font-weight: 600; margin-bottom: 10px;">어느 단계를 개선하시겠습니까?</div>
+          <div style="font-weight: 600; margin-bottom: 16px; color: #1d1d1f; font-size: 1rem;">어느 단계를 개선하시겠습니까?</div>
           <div class="improvement-inputs">
             <div class="input-group">
               <label>개선 타겟 KYC 완료율 (%)</label>
@@ -628,6 +755,222 @@
           </div>
         </div>
       </div>
+      </div>
+      <!-- End of Tab 1: 전체 퍼널 분석 -->
+
+      <!-- Tab 2: 통화별 분석 -->
+      <div id="currency_tab" class="tab-content">
+        <!-- 저장/불러오기 -->
+        <div class="section">
+          <div class="save-section">
+            <div style="font-weight: 600; margin-bottom: 16px; font-size: 1.125rem; color: #1d1d1f; letter-spacing: -0.01em;">통화별 데이터 저장/불러오기</div>
+            <div class="save-controls">
+              <input type="date" id="currency_save_date" />
+              <input type="text" id="currency_save_label" placeholder="메모 (선택사항)" style="flex: 1; min-width: 200px;" />
+              <button class="btn-save" onclick="saveCurrencyData()">현재 지표 저장</button>
+              <button class="btn-save" onclick="refreshCurrencyData()" style="background: #007aff;">새로고침</button>
+            </div>
+
+            <div style="height: 1px; background: rgba(0, 0, 0, 0.08); margin: 24px 0;"></div>
+
+            <div style="font-weight: 600; margin-bottom: 16px; font-size: 1rem; color: #1d1d1f; letter-spacing: -0.01em;">저장된 통화별 데이터</div>
+
+            <!-- 로딩 메시지 -->
+            <div class="loading-message" id="currency_loadingMessage">
+              <div class="spinner"></div>
+              <div class="loading-text">구글 시트 데이터 동기화 중...</div>
+            </div>
+
+            <div class="saved-data-list" id="currency_savedDataList"></div>
+          </div>
+        </div>
+
+        <!-- 송금신청 시작 유저 수 -->
+        <div class="section">
+          <div class="section-title">기준 데이터</div>
+          <div class="step-inputs">
+            <div class="input-group">
+              <label>송금신청 시작 유저 수 (명/월)</label>
+              <input type="number" id="currency_start_users" value="420" min="0">
+              <div style="font-size: 0.8125rem; color: #86868b; margin-top: 4px;">전체 퍼널에서 Step 3까지 도달한 유저 수</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 통화별 송금신청 완료율 및 비중 -->
+        <div class="section">
+          <div class="section-title">💱 통화별 송금신청 완료율 (신청 시작 → 신청 완료)</div>
+          <div style="background: #f0f9ff; border-radius: 12px; padding: 24px; border: 1px solid rgba(0, 122, 255, 0.2);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+              <!-- JPY -->
+              <div style="background: white; border-radius: 10px; padding: 16px; border: 1px solid rgba(0, 0, 0, 0.06);">
+                <div style="font-weight: 600; margin-bottom: 12px; color: #1d1d1f; font-size: 0.9375rem;">🇯🇵 JPY</div>
+                <div class="input-group" style="margin-bottom: 12px;">
+                  <label>선택 비중 (%)</label>
+                  <input type="number" id="currency_jpy_ratio" value="40" min="0" max="100" step="0.1">
+                </div>
+                <div class="input-group">
+                  <label>신청 완료율 (%)</label>
+                  <input type="number" id="currency_jpy_rate" value="85" min="0" max="100" step="0.1">
+                </div>
+              </div>
+
+              <!-- USD -->
+              <div style="background: white; border-radius: 10px; padding: 16px; border: 1px solid rgba(0, 0, 0, 0.06);">
+                <div style="font-weight: 600; margin-bottom: 12px; color: #1d1d1f; font-size: 0.9375rem;">🇺🇸 USD</div>
+                <div class="input-group" style="margin-bottom: 12px;">
+                  <label>선택 비중 (%)</label>
+                  <input type="number" id="currency_usd_ratio" value="25" min="0" max="100" step="0.1">
+                </div>
+                <div class="input-group">
+                  <label>신청 완료율 (%)</label>
+                  <input type="number" id="currency_usd_rate" value="82" min="0" max="100" step="0.1">
+                </div>
+              </div>
+
+              <!-- EUR -->
+              <div style="background: white; border-radius: 10px; padding: 16px; border: 1px solid rgba(0, 0, 0, 0.06);">
+                <div style="font-weight: 600; margin-bottom: 12px; color: #1d1d1f; font-size: 0.9375rem;">🇪🇺 EUR</div>
+                <div class="input-group" style="margin-bottom: 12px;">
+                  <label>선택 비중 (%)</label>
+                  <input type="number" id="currency_eur_ratio" value="15" min="0" max="100" step="0.1">
+                </div>
+                <div class="input-group">
+                  <label>신청 완료율 (%)</label>
+                  <input type="number" id="currency_eur_rate" value="78" min="0" max="100" step="0.1">
+                </div>
+              </div>
+
+              <!-- AUD -->
+              <div style="background: white; border-radius: 10px; padding: 16px; border: 1px solid rgba(0, 0, 0, 0.06);">
+                <div style="font-weight: 600; margin-bottom: 12px; color: #1d1d1f; font-size: 0.9375rem;">🇦🇺 AUD</div>
+                <div class="input-group" style="margin-bottom: 12px;">
+                  <label>선택 비중 (%)</label>
+                  <input type="number" id="currency_aud_ratio" value="10" min="0" max="100" step="0.1">
+                </div>
+                <div class="input-group">
+                  <label>신청 완료율 (%)</label>
+                  <input type="number" id="currency_aud_rate" value="75" min="0" max="100" step="0.1">
+                </div>
+              </div>
+
+              <!-- CAD -->
+              <div style="background: white; border-radius: 10px; padding: 16px; border: 1px solid rgba(0, 0, 0, 0.06);">
+                <div style="font-weight: 600; margin-bottom: 12px; color: #1d1d1f; font-size: 0.9375rem;">🇨🇦 CAD</div>
+                <div class="input-group" style="margin-bottom: 12px;">
+                  <label>선택 비중 (%)</label>
+                  <input type="number" id="currency_cad_ratio" value="6" min="0" max="100" step="0.1">
+                </div>
+                <div class="input-group">
+                  <label>신청 완료율 (%)</label>
+                  <input type="number" id="currency_cad_rate" value="72" min="0" max="100" step="0.1">
+                </div>
+              </div>
+
+              <!-- GBP -->
+              <div style="background: white; border-radius: 10px; padding: 16px; border: 1px solid rgba(0, 0, 0, 0.06);">
+                <div style="font-weight: 600; margin-bottom: 12px; color: #1d1d1f; font-size: 0.9375rem;">🇬🇧 GBP</div>
+                <div class="input-group" style="margin-bottom: 12px;">
+                  <label>선택 비중 (%)</label>
+                  <input type="number" id="currency_gbp_ratio" value="4" min="0" max="100" step="0.1">
+                </div>
+                <div class="input-group">
+                  <label>신청 완료율 (%)</label>
+                  <input type="number" id="currency_gbp_rate" value="76" min="0" max="100" step="0.1">
+                </div>
+              </div>
+            </div>
+
+            <!-- 현재 가중평균 완료율 표시 -->
+            <div style="margin-top: 24px; padding: 20px; background: white; border-radius: 10px; border: 1px solid rgba(0, 0, 0, 0.06);">
+              <div style="text-align: center;">
+                <div style="font-size: 0.875rem; color: #6e6e73; margin-bottom: 8px;">전체 가중평균 신청 완료율</div>
+                <div style="font-size: 2.5rem; font-weight: 600; color: #007aff; letter-spacing: -0.02em;" id="currency_weighted_rate">-</div>
+                <div style="font-size: 0.875rem; color: #86868b; margin-top: 4px;">
+                  송금신청 완료 유저: <span style="font-weight: 600; color: #1d1d1f;" id="currency_completed_users">-</span>명
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 통화별 개선 시나리오 -->
+        <div class="section">
+          <div class="section-title">🎯 특정 통화 개선 시나리오</div>
+          <div class="improvement-section">
+            <div style="font-weight: 600; margin-bottom: 16px; color: #1d1d1f; font-size: 1rem;">어느 통화를 개선하시겠습니까?</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+              <div class="input-group">
+                <label>개선 대상 통화</label>
+                <select id="target_currency" style="padding: 12px 16px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 10px; font-size: 1rem; background: white; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; color: #1d1d1f;">
+                  <option value="jpy">🇯🇵 JPY</option>
+                  <option value="usd">🇺🇸 USD</option>
+                  <option value="eur">🇪🇺 EUR</option>
+                  <option value="aud">🇦🇺 AUD</option>
+                  <option value="cad">🇨🇦 CAD</option>
+                  <option value="gbp">🇬🇧 GBP</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label>개선 목표 완료율 (%)</label>
+                <input type="number" id="target_currency_rate" value="90" min="0" max="100" step="0.1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-calculate" onclick="calculateCurrencyImpact()">💱 통화별 임팩트 계산하기</button>
+
+        <!-- 통화별 결과 -->
+        <div class="results" id="currency_results">
+          <div class="results-title">💱 통화별 개선 임팩트</div>
+
+          <div class="impact-highlight" style="background: linear-gradient(135deg, #007aff 0%, #0051d5 100%);">
+            <div style="font-size: 1.2rem;">선택한 통화 개선 효과</div>
+            <div class="impact-value">
+              <span id="currency_result_name">JPY 🇯🇵</span>
+            </div>
+            <div style="font-size: 1.5rem; opacity: 0.95; margin-top: 8px;">
+              해당 통화 완료율: <span id="currency_result_current">85%</span> → <span id="currency_result_target">90%</span>
+            </div>
+            <div style="font-size: 1.3rem; opacity: 0.95; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.3);">
+              전체 가중평균 완료율: <span id="currency_result_weighted_current">80.0%</span> → <span id="currency_result_weighted_new">82.0%</span>
+            </div>
+            <div style="font-size: 1rem; opacity: 0.9; margin-top: 8px;">
+              (<span id="currency_result_weighted_diff">+2.0%p</span> 증가)
+            </div>
+          </div>
+
+          <div style="height: 30px;"></div>
+
+          <div class="results-grid">
+            <div class="result-card">
+              <div class="result-label">추가 신청 완료 유저</div>
+              <div class="result-value" id="currency_result_users">-</div>
+              <div class="result-unit">명/월</div>
+            </div>
+
+            <div class="result-card">
+              <div class="result-label">추가 송금액 (GMV)</div>
+              <div class="result-value" id="currency_result_gmv">-</div>
+              <div class="result-unit">원/월</div>
+            </div>
+
+            <div class="result-card">
+              <div class="result-label">추가 수수료 수익</div>
+              <div class="result-value" id="currency_result_revenue">-</div>
+              <div class="result-unit">원/월</div>
+            </div>
+
+            <div class="result-card">
+              <div class="result-label">연간 예상 수익 증가</div>
+              <div class="result-value" id="currency_result_yearly">-</div>
+              <div class="result-unit">원/년</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of Tab 2: 통화별 분석 -->
     </div>
   </div>
 
@@ -721,8 +1064,8 @@
     const STORAGE_KEY = 'remittance_metrics_data'; // localStorage는 캐시용으로만 사용
     const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxItp1Ebs9LpJFFSpK-XTgmWZ3UfZST19j5OEBcXTwtWy6LeUStgElXDGEKZZfn0xk/exec';
 
-    async function saveData() {
-      const date = document.getElementById('save_date').value;
+    async function saveFunnelData() {
+      const date = document.getElementById('funnel_save_date').value;
       if (!date) {
         alert('날짜를 선택해주세요.');
         return;
@@ -733,8 +1076,9 @@
 
       const data = {
         id: id,
+        type: 'funnel',
         date: date,
-        label: document.getElementById('save_label').value || '',
+        label: document.getElementById('funnel_save_label').value || '',
         signups: parseFloat(document.getElementById('signups').value) || 0,
         kycRate: parseFloat(document.getElementById('kyc_rate').value) || 0,
         startRate: parseFloat(document.getElementById('start_rate').value) || 0,
@@ -770,12 +1114,87 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
 
         // 입력 필드 초기화
-        document.getElementById('save_label').value = '';
+        document.getElementById('funnel_save_label').value = '';
 
         alert('저장되었습니다!');
 
         // 데이터 새로고침
-        await refreshData();
+        await refreshFunnelData();
+      } catch (error) {
+        console.error('저장 실패:', error);
+        alert('저장에 실패했습니다. 다시 시도해주세요.');
+      }
+    }
+
+    async function saveCurrencyData() {
+      const date = document.getElementById('currency_save_date').value;
+      if (!date) {
+        alert('날짜를 선택해주세요.');
+        return;
+      }
+
+      // 고유 ID: 날짜 + 시간 (ISO 문자열)
+      const id = new Date().toISOString();
+
+      const data = {
+        id: id,
+        type: 'currency',
+        date: date,
+        label: document.getElementById('currency_save_label').value || '',
+        currencyStartUsers: parseFloat(document.getElementById('currency_start_users').value) || 0,
+        jpyRatio: parseFloat(document.getElementById('currency_jpy_ratio').value) || 0,
+        jpyRate: parseFloat(document.getElementById('currency_jpy_rate').value) || 0,
+        usdRatio: parseFloat(document.getElementById('currency_usd_ratio').value) || 0,
+        usdRate: parseFloat(document.getElementById('currency_usd_rate').value) || 0,
+        eurRatio: parseFloat(document.getElementById('currency_eur_ratio').value) || 0,
+        eurRate: parseFloat(document.getElementById('currency_eur_rate').value) || 0,
+        audRatio: parseFloat(document.getElementById('currency_aud_ratio').value) || 0,
+        audRate: parseFloat(document.getElementById('currency_aud_rate').value) || 0,
+        cadRatio: parseFloat(document.getElementById('currency_cad_ratio').value) || 0,
+        cadRate: parseFloat(document.getElementById('currency_cad_rate').value) || 0,
+        gbpRatio: parseFloat(document.getElementById('currency_gbp_ratio').value) || 0,
+        gbpRate: parseFloat(document.getElementById('currency_gbp_rate').value) || 0,
+        avgAmount: parseFloat(document.getElementById('avg_amount').value) || 0,
+        feeRate: parseFloat(document.getElementById('fee_rate').value) || 0,
+        savedAt: id
+      };
+
+      // 가중평균 완료율 계산
+      const currencies = ['jpy', 'usd', 'eur', 'aud', 'cad', 'gbp'];
+      let weightedRate = 0;
+      currencies.forEach(curr => {
+        const ratio = data[`${curr}Ratio`];
+        const rate = data[`${curr}Rate`];
+        weightedRate += (ratio / 100) * (rate / 100);
+      });
+      data.weightedRate = weightedRate * 100;
+      data.completedUsers = data.currencyStartUsers * weightedRate;
+
+      try {
+        // Google Sheets에 저장 (주요 저장소)
+        const response = await fetch(GOOGLE_SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+
+        // localStorage에 캐시 저장
+        let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        savedData.push(data);
+        // 날짜 최신순, 같은 날짜는 시간 최신순으로 정렬
+        savedData.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+
+        // 입력 필드 초기화
+        document.getElementById('currency_save_label').value = '';
+
+        alert('저장되었습니다!');
+
+        // 데이터 새로고침
+        await refreshCurrencyData();
       } catch (error) {
         console.error('저장 실패:', error);
         alert('저장에 실패했습니다. 다시 시도해주세요.');
@@ -799,7 +1218,7 @@
       }
     }
 
-    function loadData(id) {
+    function loadFunnelData(id) {
       const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
       const data = savedData.find(item => item.id === id);
 
@@ -831,7 +1250,39 @@
       alert('데이터를 불러왔습니다!');
     }
 
-    async function deleteData(id) {
+    function loadCurrencyData(id) {
+      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      const data = savedData.find(item => item.id === id);
+
+      if (!data) {
+        alert('데이터를 찾을 수 없습니다.');
+        return;
+      }
+
+      // 데이터 로드
+      document.getElementById('currency_start_users').value = data.currencyStartUsers;
+      document.getElementById('currency_jpy_ratio').value = data.jpyRatio;
+      document.getElementById('currency_jpy_rate').value = data.jpyRate;
+      document.getElementById('currency_usd_ratio').value = data.usdRatio;
+      document.getElementById('currency_usd_rate').value = data.usdRate;
+      document.getElementById('currency_eur_ratio').value = data.eurRatio;
+      document.getElementById('currency_eur_rate').value = data.eurRate;
+      document.getElementById('currency_aud_ratio').value = data.audRatio;
+      document.getElementById('currency_aud_rate').value = data.audRate;
+      document.getElementById('currency_cad_ratio').value = data.cadRatio;
+      document.getElementById('currency_cad_rate').value = data.cadRate;
+      document.getElementById('currency_gbp_ratio').value = data.gbpRatio;
+      document.getElementById('currency_gbp_rate').value = data.gbpRate;
+      document.getElementById('avg_amount').value = data.avgAmount;
+      document.getElementById('fee_rate').value = data.feeRate;
+
+      // 가중평균 업데이트
+      updateCurrencyWeightedRate();
+
+      alert('데이터를 불러왔습니다!');
+    }
+
+    async function deleteFunnelData(id) {
       if (!confirm('정말 삭제하시겠습니까?')) {
         return;
       }
@@ -852,23 +1303,52 @@
         alert('삭제되었습니다.');
 
         // 데이터 새로고침
-        await refreshData();
+        await refreshFunnelData();
       } catch (error) {
         console.error('삭제 실패:', error);
         alert('삭제에 실패했습니다. 다시 시도해주세요.');
       }
     }
 
-    function displaySavedData() {
-      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      const container = document.getElementById('savedDataList');
-
-      if (savedData.length === 0) {
-        container.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">저장된 데이터가 없습니다.</div>';
+    async function deleteCurrencyData(id) {
+      if (!confirm('정말 삭제하시겠습니까?')) {
         return;
       }
 
-      container.innerHTML = savedData.map(data => {
+      try {
+        console.log('삭제 요청 ID:', id);
+
+        // Google Sheets에서 삭제
+        await deleteFromGoogleSheets(id);
+
+        // localStorage 캐시에서도 삭제
+        let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        console.log('삭제 전 데이터 개수:', savedData.length);
+        savedData = savedData.filter(item => item.id !== id);
+        console.log('삭제 후 데이터 개수:', savedData.length);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
+
+        alert('삭제되었습니다.');
+
+        // 데이터 새로고침
+        await refreshCurrencyData();
+      } catch (error) {
+        console.error('삭제 실패:', error);
+        alert('삭제에 실패했습니다. 다시 시도해주세요.');
+      }
+    }
+
+    function displayFunnelData() {
+      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      const funnelData = savedData.filter(item => item.type === 'funnel' || !item.type); // 호환성을 위해 type이 없는 데이터도 포함
+      const container = document.getElementById('funnel_savedDataList');
+
+      if (funnelData.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">저장된 퍼널 데이터가 없습니다.</div>';
+        return;
+      }
+
+      container.innerHTML = funnelData.map(data => {
         const dateObj = new Date(data.date);
         const displayDate = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
         const timeObj = new Date(data.savedAt);
@@ -878,34 +1358,80 @@
         return `
           <div class="saved-item">
             <div class="saved-item-info">
-              <div class="saved-item-date">${displayDate} ${displayTime} ${data.label ? '- ' + data.label : ''}</div>
+              <div class="saved-item-date">${data.label || '메모 없음'}</div>
               <div class="saved-item-stats">
-                가입자: ${data.signups.toLocaleString()}명 |
+                ${displayDate} ${displayTime} | 가입자: ${data.signups.toLocaleString()}명 |
                 전체 전환율: ${data.overallRate.toFixed(1)}% |
                 첫송금: ${remitUsers.toLocaleString()}명
               </div>
             </div>
             <div class="saved-item-actions">
-              <button class="btn-load" onclick="loadData('${data.id}')">불러오기</button>
-              <button class="btn-delete" onclick="deleteData('${data.id}')">삭제</button>
+              <button class="btn-load" onclick="loadFunnelData('${data.id}')">불러오기</button>
+              <button class="btn-delete" onclick="deleteFunnelData('${data.id}')">삭제</button>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function showLoading() {
-      document.getElementById('loadingMessage').classList.add('show');
-      document.getElementById('savedDataList').style.display = 'none';
+    function displayCurrencyData() {
+      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      const currencyData = savedData.filter(item => item.type === 'currency');
+      const container = document.getElementById('currency_savedDataList');
+
+      if (currencyData.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">저장된 통화별 데이터가 없습니다.</div>';
+        return;
+      }
+
+      container.innerHTML = currencyData.map(data => {
+        const dateObj = new Date(data.date);
+        const displayDate = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+        const timeObj = new Date(data.savedAt);
+        const displayTime = timeObj.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+        const completedUsers = Math.round(data.completedUsers);
+
+        return `
+          <div class="saved-item">
+            <div class="saved-item-info">
+              <div class="saved-item-date">${data.label || '메모 없음'}</div>
+              <div class="saved-item-stats">
+                ${displayDate} ${displayTime} | 신청 시작: ${data.currencyStartUsers.toLocaleString()}명 |
+                가중평균 완료율: ${data.weightedRate.toFixed(1)}% |
+                신청 완료: ${completedUsers.toLocaleString()}명
+              </div>
+            </div>
+            <div class="saved-item-actions">
+              <button class="btn-load" onclick="loadCurrencyData('${data.id}')">불러오기</button>
+              <button class="btn-delete" onclick="deleteCurrencyData('${data.id}')">삭제</button>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
-    function hideLoading() {
-      document.getElementById('loadingMessage').classList.remove('show');
-      document.getElementById('savedDataList').style.display = 'block';
+    function showFunnelLoading() {
+      document.getElementById('funnel_loadingMessage').classList.add('show');
+      document.getElementById('funnel_savedDataList').style.display = 'none';
     }
 
-    async function refreshData() {
-      showLoading();
+    function hideFunnelLoading() {
+      document.getElementById('funnel_loadingMessage').classList.remove('show');
+      document.getElementById('funnel_savedDataList').style.display = 'block';
+    }
+
+    function showCurrencyLoading() {
+      document.getElementById('currency_loadingMessage').classList.add('show');
+      document.getElementById('currency_savedDataList').style.display = 'none';
+    }
+
+    function hideCurrencyLoading() {
+      document.getElementById('currency_loadingMessage').classList.remove('show');
+      document.getElementById('currency_savedDataList').style.display = 'block';
+    }
+
+    async function refreshFunnelData() {
+      showFunnelLoading();
       try {
         // 캐시 우회를 위한 타임스탬프 추가
         const timestamp = new Date().getTime();
@@ -914,14 +1440,14 @@
 
         if (data.status === 'error') {
           console.error('데이터 불러오기 실패:', data.message);
-          hideLoading();
+          hideFunnelLoading();
           return;
         }
 
         // 데이터가 배열인지 확인
         if (!Array.isArray(data)) {
           console.error('예상치 못한 데이터 형식:', data);
-          hideLoading();
+          hideFunnelLoading();
           return;
         }
 
@@ -930,23 +1456,193 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(sortedData));
 
         // UI 업데이트
-        displaySavedData();
+        displayFunnelData();
 
         console.log(`${data.length}개의 데이터를 불러왔습니다.`);
-        hideLoading();
+        hideFunnelLoading();
       } catch (error) {
         console.error('Google Sheets 불러오기 실패:', error);
         // 실패 시 localStorage 캐시 사용
-        displaySavedData();
-        hideLoading();
+        displayFunnelData();
+        hideFunnelLoading();
       }
     }
 
+    async function refreshCurrencyData() {
+      showCurrencyLoading();
+      try {
+        // 캐시 우회를 위한 타임스탬프 추가
+        const timestamp = new Date().getTime();
+        const response = await fetch(`${GOOGLE_SHEET_URL}?timestamp=${timestamp}`);
+        const data = await response.json();
+
+        if (data.status === 'error') {
+          console.error('데이터 불러오기 실패:', data.message);
+          hideCurrencyLoading();
+          return;
+        }
+
+        // 데이터가 배열인지 확인
+        if (!Array.isArray(data)) {
+          console.error('예상치 못한 데이터 형식:', data);
+          hideCurrencyLoading();
+          return;
+        }
+
+        // Google Sheets 데이터를 localStorage 캐시에 저장
+        const sortedData = data.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(sortedData));
+
+        // UI 업데이트
+        displayCurrencyData();
+
+        console.log(`${data.length}개의 데이터를 불러왔습니다.`);
+        hideCurrencyLoading();
+      } catch (error) {
+        console.error('Google Sheets 불러오기 실패:', error);
+        // 실패 시 localStorage 캐시 사용
+        displayCurrencyData();
+        hideCurrencyLoading();
+      }
+    }
+
+    // 탭 전환 함수
+    function switchTab(tabName) {
+      // 모든 탭 버튼 비활성화
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      // 모든 탭 콘텐츠 숨기기
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      // 선택한 탭 활성화
+      if (tabName === 'funnel') {
+        document.querySelector('.tab:nth-child(1)').classList.add('active');
+        document.getElementById('funnel_tab').classList.add('active');
+      } else if (tabName === 'currency') {
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        document.getElementById('currency_tab').classList.add('active');
+        // 통화별 탭으로 전환 시 가중평균 계산
+        updateCurrencyWeightedRate();
+      }
+    }
+
+    // 통화별 가중평균 완료율 계산
+    function updateCurrencyWeightedRate() {
+      const startUsers = parseFloat(document.getElementById('currency_start_users').value) || 0;
+      const currencies = ['jpy', 'usd', 'eur', 'aud', 'cad', 'gbp'];
+
+      let weightedRate = 0;
+      currencies.forEach(curr => {
+        const ratio = parseFloat(document.getElementById(`currency_${curr}_ratio`).value) || 0;
+        const rate = parseFloat(document.getElementById(`currency_${curr}_rate`).value) || 0;
+        weightedRate += (ratio / 100) * (rate / 100);
+      });
+
+      const completedUsers = startUsers * weightedRate;
+
+      document.getElementById('currency_weighted_rate').textContent = (weightedRate * 100).toFixed(1) + '%';
+      document.getElementById('currency_completed_users').textContent = Math.round(completedUsers).toLocaleString();
+    }
+
+    // 통화별 입력 필드에 이벤트 리스너 추가
+    ['currency_start_users', 'currency_jpy_ratio', 'currency_jpy_rate',
+     'currency_usd_ratio', 'currency_usd_rate', 'currency_eur_ratio', 'currency_eur_rate',
+     'currency_aud_ratio', 'currency_aud_rate', 'currency_cad_ratio', 'currency_cad_rate',
+     'currency_gbp_ratio', 'currency_gbp_rate'].forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener('input', updateCurrencyWeightedRate);
+      }
+    });
+
+    // 통화별 임팩트 계산 함수
+    function calculateCurrencyImpact() {
+      const startUsers = parseFloat(document.getElementById('currency_start_users').value) || 0;
+      const avgAmount = parseFloat(document.getElementById('avg_amount').value) || 0;
+      const feeRate = parseFloat(document.getElementById('fee_rate').value) || 0;
+
+      // 통화별 데이터 수집
+      const currencies = ['jpy', 'usd', 'eur', 'aud', 'cad', 'gbp'];
+      const currencyData = {};
+
+      currencies.forEach(curr => {
+        currencyData[curr] = {
+          ratio: parseFloat(document.getElementById(`currency_${curr}_ratio`).value) || 0,
+          rate: parseFloat(document.getElementById(`currency_${curr}_rate`).value) || 0
+        };
+      });
+
+      // 선택한 통화
+      const targetCurrency = document.getElementById('target_currency').value;
+      const targetRate = parseFloat(document.getElementById('target_currency_rate').value) || 0;
+
+      // 현재 전체 신청 완료자 계산 (통화별 가중평균)
+      let currentWeightedRate = 0;
+      currencies.forEach(curr => {
+        currentWeightedRate += (currencyData[curr].ratio / 100) * (currencyData[curr].rate / 100);
+      });
+
+      const currentCompletedUsers = startUsers * currentWeightedRate;
+
+      // 개선 후 전체 신청 완료자 계산
+      let newWeightedRate = 0;
+      currencies.forEach(curr => {
+        if (curr === targetCurrency) {
+          newWeightedRate += (currencyData[curr].ratio / 100) * (targetRate / 100);
+        } else {
+          newWeightedRate += (currencyData[curr].ratio / 100) * (currencyData[curr].rate / 100);
+        }
+      });
+
+      const newCompletedUsers = startUsers * newWeightedRate;
+
+      // 임팩트 계산
+      const additionalUsers = newCompletedUsers - currentCompletedUsers;
+      const additionalGMV = additionalUsers * avgAmount;
+      const additionalRevenue = additionalGMV * (feeRate / 100);
+      const yearlyRevenue = additionalRevenue * 12;
+
+      // 통화 이름 매핑
+      const currencyNames = {
+        jpy: 'JPY 🇯🇵',
+        usd: 'USD 🇺🇸',
+        eur: 'EUR 🇪🇺',
+        aud: 'AUD 🇦🇺',
+        cad: 'CAD 🇨🇦',
+        gbp: 'GBP 🇬🇧'
+      };
+
+      // 가중평균 변화 계산
+      const weightedRateDiff = (newWeightedRate - currentWeightedRate) * 100;
+
+      // 결과 표시
+      document.getElementById('currency_result_name').textContent = currencyNames[targetCurrency];
+      document.getElementById('currency_result_current').textContent = currencyData[targetCurrency].rate.toFixed(1) + '%';
+      document.getElementById('currency_result_target').textContent = targetRate.toFixed(1) + '%';
+
+      // 가중평균 완료율 표시
+      document.getElementById('currency_result_weighted_current').textContent = (currentWeightedRate * 100).toFixed(1) + '%';
+      document.getElementById('currency_result_weighted_new').textContent = (newWeightedRate * 100).toFixed(1) + '%';
+      document.getElementById('currency_result_weighted_diff').textContent = '+' + weightedRateDiff.toFixed(1) + '%p';
+
+      document.getElementById('currency_result_users').textContent = Math.round(additionalUsers).toLocaleString();
+      document.getElementById('currency_result_gmv').textContent = Math.round(additionalGMV).toLocaleString();
+      document.getElementById('currency_result_revenue').textContent = Math.round(additionalRevenue).toLocaleString();
+      document.getElementById('currency_result_yearly').textContent = Math.round(yearlyRevenue).toLocaleString();
+
+      document.getElementById('currency_results').classList.add('show');
+      document.getElementById('currency_results').scrollIntoView({ behavior: 'smooth' });
+    }
+
     // 오늘 날짜로 초기화
-    document.getElementById('save_date').valueAsDate = new Date();
+    document.getElementById('funnel_save_date').valueAsDate = new Date();
+    document.getElementById('currency_save_date').valueAsDate = new Date();
 
     // 페이지 로드 시 Google Sheets에서 데이터 자동 불러오기
-    refreshData();
+    refreshFunnelData();
+    refreshCurrencyData();
+
+    // 통화별 가중평균 초기 계산
+    updateCurrencyWeightedRate();
   </script>
 </body>
 </html>
