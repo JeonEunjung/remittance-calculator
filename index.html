@@ -63,7 +63,12 @@
     }
 
     .funnel-container {
+      display: -webkit-box;
+      display: -webkit-flex;
       display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
       flex-direction: column;
       gap: 12px;
     }
@@ -79,12 +84,19 @@
     .funnel-step:hover {
       background: #fafafa;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      -webkit-transform: translateY(-1px);
       transform: translateY(-1px);
     }
 
     .step-header {
+      display: -webkit-box;
+      display: -webkit-flex;
       display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
       justify-content: space-between;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
       align-items: center;
       margin-bottom: 16px;
     }
@@ -110,10 +122,16 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
+      -webkit-box-sizing: border-box;
     }
 
     .input-group {
+      display: -webkit-box;
+      display: -webkit-flex;
       display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
       flex-direction: column;
       gap: 8px;
     }
@@ -134,6 +152,8 @@
       transition: all 0.2s ease;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
       color: #1d1d1f;
+      -webkit-appearance: none;
+      -moz-appearance: textfield;
     }
 
     input[type="number"]:hover {
@@ -144,10 +164,15 @@
       outline: none;
       border-color: #007aff;
       box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+      -webkit-appearance: none;
     }
 
     .conversion-display {
+      display: -webkit-box;
+      display: -webkit-flex;
       display: flex;
+      -webkit-box-align: baseline;
+      -webkit-align-items: baseline;
       align-items: baseline;
       gap: 8px;
       margin-top: 12px;
@@ -182,6 +207,7 @@
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 15px;
       margin-top: 15px;
+      -webkit-box-sizing: border-box;
     }
 
     .btn-calculate {
@@ -202,10 +228,12 @@
 
     .btn-calculate:hover {
       background: #0051d5;
+      -webkit-transform: scale(1.01);
       transform: scale(1.01);
     }
 
     .btn-calculate:active {
+      -webkit-transform: scale(0.98);
       transform: scale(0.98);
     }
 
@@ -236,6 +264,7 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
       margin-bottom: 24px;
+      -webkit-box-sizing: border-box;
     }
 
     .result-card {
@@ -299,9 +328,14 @@
     }
 
     .save-controls {
+      display: -webkit-box;
+      display: -webkit-flex;
       display: flex;
       gap: 12px;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
       align-items: center;
+      -webkit-flex-wrap: wrap;
       flex-wrap: wrap;
     }
 
@@ -314,12 +348,14 @@
       transition: all 0.2s ease;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
       color: #1d1d1f;
+      -webkit-appearance: none;
     }
 
     input[type="date"]:focus, input[type="text"]:focus {
       outline: none;
       border-color: #007aff;
       box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+      -webkit-appearance: none;
     }
 
     .btn-save {
@@ -356,8 +392,14 @@
       border-radius: 10px;
       padding: 16px;
       margin-bottom: 12px;
+      display: -webkit-box;
+      display: -webkit-flex;
       display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
       justify-content: space-between;
+      -webkit-box-align: start;
+      -webkit-align-items: flex-start;
       align-items: flex-start;
       border: 1px solid rgba(0, 0, 0, 0.06);
       transition: all 0.2s ease;
@@ -391,8 +433,11 @@
     }
 
     .saved-item-actions {
+      display: -webkit-box;
+      display: -webkit-flex;
       display: flex;
       gap: 8px;
+      -webkit-flex-shrink: 0;
       flex-shrink: 0;
     }
 
@@ -464,6 +509,8 @@
 
     /* 탭 스타일 */
     .tabs {
+      display: -webkit-box;
+      display: -webkit-flex;
       display: flex;
       gap: 8px;
       margin-bottom: 32px;
@@ -545,7 +592,12 @@
       }
 
       .step-header {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
         flex-direction: column;
+        -webkit-box-align: start;
+        -webkit-align-items: flex-start;
         align-items: flex-start;
         gap: 8px;
       }
@@ -567,6 +619,9 @@
       }
 
       .save-controls {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
         flex-direction: column;
         gap: 8px;
       }
@@ -577,21 +632,33 @@
       }
 
       .saved-item {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
         flex-direction: column;
         gap: 12px;
       }
 
       .saved-item-actions {
         width: 100%;
+        -webkit-box-pack: stretch;
+        -webkit-justify-content: stretch;
         justify-content: stretch;
       }
 
       .saved-item-actions button {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
         flex: 1;
       }
 
       .conversion-display {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
         flex-direction: column;
+        -webkit-box-align: start;
+        -webkit-align-items: flex-start;
         align-items: flex-start;
         gap: 4px;
       }
