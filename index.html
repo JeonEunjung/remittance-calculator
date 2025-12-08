@@ -1424,12 +1424,32 @@
 
       // 가중평균 완료율 계산
       const currencies = ['jpy', 'usd', 'eur', 'aud', 'cad', 'gbp'];
+      let ratioSum = 0;
       let weightedRate = 0;
       currencies.forEach(curr => {
         const ratio = data[`${curr}Ratio`];
         const rate = data[`${curr}Rate`];
+        ratioSum += ratio;
         weightedRate += (ratio / 100) * (rate / 100);
       });
+
+      // 기타 통화 처리 (비중이 100% 미만인 경우)
+      if (ratioSum < 100) {
+        const otherRatio = 100 - ratioSum;
+        // 기타 통화 가정 완료율 (6개 통화의 평균 완료율 사용)
+        let totalRate = 0;
+        let count = 0;
+        currencies.forEach(curr => {
+          const rate = data[`${curr}Rate`];
+          if (rate > 0) {
+            totalRate += rate;
+            count++;
+          }
+        });
+        const otherRate = count > 0 ? (totalRate / count) : 80;
+        weightedRate += (otherRatio / 100) * (otherRate / 100);
+      }
+
       data.weightedRate = weightedRate * 100;
       data.completedUsers = data.currencyStartUsers * weightedRate;
 
