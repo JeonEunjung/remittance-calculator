@@ -1885,11 +1885,34 @@
       const targetCurrency = document.getElementById('target_currency').value;
       const targetRate = parseFloat(document.getElementById('target_currency_rate').value) || 0;
 
+      // 비중 합계 계산
+      let ratioSum = 0;
+      currencies.forEach(curr => {
+        ratioSum += currencyData[curr].ratio;
+      });
+
       // 현재 전체 신청 완료자 계산 (통화별 가중평균)
       let currentWeightedRate = 0;
       currencies.forEach(curr => {
         currentWeightedRate += (currencyData[curr].ratio / 100) * (currencyData[curr].rate / 100);
       });
+
+      // 기타 통화 처리 (비중이 100% 미만인 경우)
+      let otherRate = 0;
+      if (ratioSum < 100) {
+        const otherRatio = 100 - ratioSum;
+        // 기타 통화 가정 완료율 (6개 통화의 평균 완료율 사용)
+        let totalRate = 0;
+        let count = 0;
+        currencies.forEach(curr => {
+          if (currencyData[curr].rate > 0) {
+            totalRate += currencyData[curr].rate;
+            count++;
+          }
+        });
+        otherRate = count > 0 ? (totalRate / count) : 80;
+        currentWeightedRate += (otherRatio / 100) * (otherRate / 100);
+      }
 
       const currentCompletedUsers = startUsers * currentWeightedRate;
 
@@ -1902,6 +1925,12 @@
           newWeightedRate += (currencyData[curr].ratio / 100) * (currencyData[curr].rate / 100);
         }
       });
+
+      // 개선 후에도 기타 통화 포함
+      if (ratioSum < 100) {
+        const otherRatio = 100 - ratioSum;
+        newWeightedRate += (otherRatio / 100) * (otherRate / 100);
+      }
 
       const newCompletedUsers = startUsers * newWeightedRate;
 
