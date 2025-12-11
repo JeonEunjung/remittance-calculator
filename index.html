@@ -1325,7 +1325,8 @@
 
     // 데이터 저장 관련 함수들
     const STORAGE_KEY = 'remittance_metrics_data'; // localStorage는 캐시용으로만 사용
-    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxItp1Ebs9LpJFFSpK-XTgmWZ3UfZST19j5OEBcXTwtWy6LeUStgElXDGEKZZfn0xk/exec';
+    // 🔐 프록시 서버를 통해 Google Sheets에 접근 (보안 강화)
+    const PROXY_API_URL = '/api/sheets';
 
     async function saveFunnelData() {
       const date = document.getElementById('funnel_save_date').value;
@@ -1359,10 +1360,9 @@
       data.overallRate = overallRate;
 
       try {
-        // Google Sheets에 저장 (주요 저장소)
-        const response = await fetch(GOOGLE_SHEET_URL, {
+        // 🔐 프록시 서버를 통해 Google Sheets에 저장
+        const response = await fetch(PROXY_API_URL, {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -1454,10 +1454,9 @@
       data.completedUsers = data.currencyStartUsers * weightedRate;
 
       try {
-        // Google Sheets에 저장 (주요 저장소)
-        const response = await fetch(GOOGLE_SHEET_URL, {
+        // 🔐 프록시 서버를 통해 Google Sheets에 저장
+        const response = await fetch(PROXY_API_URL, {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -1484,15 +1483,15 @@
       }
     }
 
-    async function deleteFromGoogleSheets(id) {
+    async function deleteFromGoogleSheets(id, type) {
       try {
-        const response = await fetch(GOOGLE_SHEET_URL, {
+        // 🔐 프록시 서버를 통해 Google Sheets에서 삭제
+        const response = await fetch(PROXY_API_URL, {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ action: 'delete', id: id })
+          body: JSON.stringify({ action: 'delete', id: id, type: type })
         });
         console.log('Google Sheets에서 삭제 완료');
       } catch (error) {
@@ -1574,7 +1573,7 @@
         console.log('삭제 요청 ID:', id);
 
         // Google Sheets에서 삭제
-        await deleteFromGoogleSheets(id);
+        await deleteFromGoogleSheets(id, 'funnel');
 
         // localStorage 캐시에서도 삭제
         let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -1602,7 +1601,7 @@
         console.log('삭제 요청 ID:', id);
 
         // Google Sheets에서 삭제
-        await deleteFromGoogleSheets(id);
+        await deleteFromGoogleSheets(id, 'currency');
 
         // localStorage 캐시에서도 삭제
         let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -1716,9 +1715,9 @@
     async function refreshFunnelData() {
       showFunnelLoading();
       try {
-        // 캐시 우회를 위한 타임스탬프 추가
+        // 🔐 프록시 서버를 통해 Google Sheets 데이터 가져오기
         const timestamp = new Date().getTime();
-        const response = await fetch(`${GOOGLE_SHEET_URL}?timestamp=${timestamp}`);
+        const response = await fetch(`${PROXY_API_URL}?timestamp=${timestamp}`);
         const data = await response.json();
 
         if (data.status === 'error') {
@@ -1754,9 +1753,9 @@
     async function refreshCurrencyData() {
       showCurrencyLoading();
       try {
-        // 캐시 우회를 위한 타임스탬프 추가
+        // 🔐 프록시 서버를 통해 Google Sheets 데이터 가져오기
         const timestamp = new Date().getTime();
-        const response = await fetch(`${GOOGLE_SHEET_URL}?timestamp=${timestamp}`);
+        const response = await fetch(`${PROXY_API_URL}?timestamp=${timestamp}`);
         const data = await response.json();
 
         if (data.status === 'error') {

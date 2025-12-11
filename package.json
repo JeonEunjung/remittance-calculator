@@ -1,0 +1,20 @@
+{
+  "name": "remittance-calculator",
+  "version": "1.0.0",
+  "description": "해외송금 전환율 개선 임팩트 계산기",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "node-fetch": "^2.7.0"
+  },
+  "keywords": [
+    "remittance",
+    "calculator",
+    "conversion-rate"
+  ],
+  "author": "",
+  "license": "MIT"
+}

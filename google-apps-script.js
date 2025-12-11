@@ -1,9 +1,43 @@
+// 🔐 보안 설정
+// ⚠️ 중요: 이 토큰을 변경하고 .env 파일과 일치시켜야 합니다!
+const VALID_TOKEN = '50fec820f4757a66377156890de984d8577979ddb5b7e0e71d85a035777e13df';
+
 function doPost(e) {
   try {
     var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     var data = JSON.parse(e.postData.contents);
 
     Logger.log('받은 데이터: ' + JSON.stringify(data));
+
+    // 🛡️ 인증 토큰 검증
+    if (!data.auth_token || data.auth_token !== VALID_TOKEN) {
+      Logger.log('⛔ 인증 실패: 잘못된 토큰');
+      return ContentService.createTextOutput(JSON.stringify({
+        'status': 'error',
+        'message': 'Unauthorized: Invalid authentication token'
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 🚦 Rate Limiting (CacheService 사용)
+    var cache = CacheService.getScriptCache();
+    var timestamp = new Date().toISOString().substring(0, 16); // 분 단위
+    var cacheKey = 'ratelimit_' + timestamp;
+
+    var requestCount = cache.get(cacheKey);
+
+    if (requestCount === null) {
+      cache.put(cacheKey, '1', 60); // 1분 TTL
+    } else {
+      requestCount = parseInt(requestCount);
+      if (requestCount >= 30) { // 1분당 최대 30회
+        Logger.log('⛔ Rate Limit 초과: ' + requestCount + '회');
+        return ContentService.createTextOutput(JSON.stringify({
+          'status': 'error',
+          'message': 'Too many requests. Please try again later.'
+        })).setMimeType(ContentService.MimeType.JSON);
+      }
+      cache.put(cacheKey, String(requestCount + 1), 60);
+    }
 
     // DELETE 요청 처리
     if (data.action === 'delete' && data.id) {
